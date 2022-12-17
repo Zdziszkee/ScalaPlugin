@@ -9,8 +9,20 @@ lazy val root = (project in file("."))
   )
 
 Compile / unmanagedJars := ( (baseDirectory.value / "/Server/libraries") ** "*.jar").classpath
-Compile/packageBin/artifactPath := (baseDirectory.value / "/Server/plugins/ScalaPlugin.jar")
+assemblyJarName in assembly := "ScalaPlugin.jar"
+//assembly/packageBin/artifactPath := (baseDirectory.value / "/Server/plugins")
+assembly / assemblyOutputPath := (baseDirectory.value / "/Server/plugins/ScalaPlugin.jar")
 
-artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-  "ScalaPlugin.jar"
+ThisBuild / assemblyShadeRules := Seq(
+  ShadeRule.keep("scala**").inAll,
+  ShadeRule.keep("me.zdziszkee**").inAll
+)
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
 }
+lazy val app = (project in file("ScalaPlugin"))
+  .settings(
+    assembly / logLevel := Level.Debug
+    // more settings here ...
+  )
