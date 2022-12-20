@@ -9,6 +9,7 @@ lazy val root = (project in file("."))
   )
 
 Compile / unmanagedJars := ( (baseDirectory.value / "/Server/libraries") ** "*.jar").classpath
+libraryDependencies += "com.zaxxer" % "HikariCP" % "5.0.1"
 assemblyJarName in assembly := "ScalaPlugin.jar"
 //assembly/packageBin/artifactPath := (baseDirectory.value / "/Server/plugins")
 assembly / assemblyOutputPath := (baseDirectory.value / "/Server/plugins/ScalaPlugin.jar")
